@@ -4,7 +4,8 @@ exports.create = async (req, res) => {
         const {name} = req.body
         const category = await prisma.category.create({
             data: {
-                name: name
+                name: name,
+                updatedAt: new Date()
             }
         });
      res.send(category);
