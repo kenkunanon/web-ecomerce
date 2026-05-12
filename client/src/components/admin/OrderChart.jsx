@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import axios from 'axios';
+import API_URL from '../../api/config';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -11,7 +12,7 @@ const OrderChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/orders'); // Adjust the URL to your API endpoint
+        const response = await axios.get(`${API_URL}/api/orders`);
         const orders = response.data;
 
         const groupedData = orders.reduce((acc, order) => {

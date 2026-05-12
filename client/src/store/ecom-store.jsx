@@ -4,6 +4,7 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 import { listCategory } from '../api/Category'
 import { listProduct,searchFilters } from '../api/product'
 import _ from "lodash";
+import API_URL from '../api/config';
 
 
 const ecomStore = (set,get) => ({
@@ -43,7 +44,7 @@ const ecomStore = (set,get) => ({
     clearCart: () => set({ carts: [] }),
     actionLogout: () => set({ user: null, token: 0, carts: [] }),
     actionLogin: async (form) => {
-        const res = await axios.post('http://localhost:5000/api/login', form)
+        const res = await axios.post(`${API_URL}/api/login`, form)
         set({
             user: res.data.payload,
             token: res.data.token

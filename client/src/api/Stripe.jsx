@@ -1,9 +1,8 @@
 import axios from 'axios';
+import API_URL from './config';
 
-export const payment = async (token) => await axios.post('http://localhost:5000/api/user/create-payment-intent'
-    , {}, {
-    headers: {
-        Authorization: `Bearer ${token}`
-    }
-}
+export const payment = async (token) => await axios.post(
+    `${API_URL}/api/user/create-payment-intent`,
+    {},
+    { headers: { Authorization: `Bearer ${token}` } }
 )

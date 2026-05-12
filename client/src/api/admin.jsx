@@ -1,6 +1,7 @@
 import axios from "axios";
+import API_URL from "./config";
 
-const BASE = "http://localhost:5000/api";
+const BASE = `${API_URL}/api`;
 
 const headers = (token) => ({ Authorization: `Bearer ${token}` });
 
