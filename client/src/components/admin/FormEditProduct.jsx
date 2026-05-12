@@ -34,10 +34,9 @@ const FormEditProduct = () => {
   
   const fetchProduct = async(token) => {
       try {
-        const res = await readProduct(token, id, form)
-            console.log('res from backend', res)
-            setForm(res.data)
-      } catch (error) { 
+        const res = await readProduct(token, id)
+        setForm({ ...res.data, images: res.data.image || [] })
+      } catch (error) {
         console.log(error)
       }
     }

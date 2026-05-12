@@ -19,12 +19,12 @@ exports.getOrderAdmin = async (req, res) => {
     try {
         const orders = await prisma.order.findMany({
             include: {
-                products: {
+                productonorder: {
                     include: {
                         product: true
                     }
                 },
-                orderedBy: {
+                user: {
                     select: {
                         id: true,
                         email: true,
@@ -35,7 +35,7 @@ exports.getOrderAdmin = async (req, res) => {
         })
         res.json(orders)
     } catch (err) {
-        console.log(errr)
+        console.log(err)
         res.status(500).json({ message: "Server error" })
     }
 }

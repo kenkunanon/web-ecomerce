@@ -1,12 +1,8 @@
-import React from 'react'
-import ListCard from '../components/card/ListCard'
+import React from "react";
+import ListCard from "../components/card/ListCard";
 
 const Cart = () => {
-  return (
-    <div>
-      <ListCard />
-    </div>
-  )
-}
+  return <ListCard />;
+};
 
-export default Cart
+export default Cart;

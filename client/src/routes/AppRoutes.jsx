@@ -9,7 +9,6 @@ import Login from '../pages/auth/Login'
 import Register from '../pages/auth/Register'
 import Layout from '../layout/Layout'
 import LayoutAdmin from '../layout/LayoutAdmin'
-import Dashboard from '../pages/admin/Dashboard'
 import Category from '../pages/admin/Category'
 import Product from '../pages/admin/Product'
 import Manage from '../pages/admin/Manage'
@@ -25,8 +24,8 @@ const router = createBrowserRouter([
         element: <Layout />,
         children: [
             { index: true, element: <Home /> },
-            { path: 'shop', element: <Shop /> },
-            { path: 'cart', element: <Cart /> },
+            { path: 'shop', element: <ProtectRouteUser element={<Shop />} /> },
+            { path: 'cart', element: <ProtectRouteUser element={<Cart />} /> },
             { path: 'history', element: <History /> },
             { path: 'checkout', element: <CheckOut /> },
             { path: 'login', element: <Login /> },
@@ -37,15 +36,11 @@ const router = createBrowserRouter([
         path: '/admin',
         element: < ProtectRouteAdmin element=  {<LayoutAdmin/>} />,
         children: [
-            { index: true, element: <Dashboard/> },
+            { index: true, element: <Manage /> },
             { path: 'category', element: <Category/> },
             { path: 'product', element: <Product /> },
             { path: 'product/:id', element: <EditProduct /> },
             { path: 'manage', element: <Manage /> },
-            { path: 'Dashboard', element: <Dashboard /> },
-
-
-           
         ]
     },
     {

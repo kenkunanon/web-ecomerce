@@ -40,6 +40,8 @@ const ecomStore = (set,get) => ({
           return total + item.price * item.count;
         }, 0);
       },
+    clearCart: () => set({ carts: [] }),
+    actionLogout: () => set({ user: null, token: 0, carts: [] }),
     actionLogin: async (form) => {
         const res = await axios.post('http://localhost:5000/api/login', form)
         set({
@@ -77,8 +79,7 @@ const ecomStore = (set,get) => ({
 
 const usePersist = {
     name: 'ecom-store',
-    Storage: createJSONStorage(() => localStorage)
-
+    storage: createJSONStorage(() => localStorage)
 }
 const useEcomStore = create(persist(ecomStore, usePersist))
 

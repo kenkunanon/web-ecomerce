@@ -1,125 +1,87 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import useEcomStore from "../../store/ecom-store";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
   const actionLogin = useEcomStore((state) => state.actionLogin);
-  const user = useEcomStore((state) => state.user);
-  console.log("user form zustand", user);
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
+  const [form, setForm] = useState({ email: "", password: "" });
 
-  const handleOnChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const handleOnChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const res = await actionLogin(form);
       const role = res.data.payload.role;
-      roleRedirect(role);
-      toast.success("Welcome Back");
+      toast.success("ยินดีต้อนรับกลับมา 🍰");
+      role === "admin" ? navigate("/admin") : navigate("/shop");
     } catch (err) {
-      console.log(err);
-      const errMsg = err.response?.data?.message;
-      toast.error(errMsg);
-    }
-  };
-
-  const roleRedirect = (role) => {
-    if (role === "admin") {
-      navigate("/admin");
-    } else {
-      navigate(-1);
+      toast.error(err.response?.data?.message || "เกิดข้อผิดพลาด");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 relative overflow-hidden">
-      <div className="absolute inset-0 bg-tech-pattern"></div>
-      <div className="relative w-full max-w-md p-8 bg-gray-800 bg-opacity-90 shadow-lg rounded-lg border border-blue-500">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="glow-effect"></div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 via-pink-50 to-amber-50 relative overflow-hidden">
+      {/* Decorative blobs */}
+      <div className="absolute -top-24 -left-24 w-96 h-96 bg-rose-200 rounded-full opacity-30 blur-3xl" />
+      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-pink-300 rounded-full opacity-25 blur-3xl" />
+
+      <div className="relative w-full max-w-md mx-4">
+        {/* Logo / Brand */}
+        <div className="text-center mb-8">
+          <span className="text-5xl">🍰</span>
+          <h1 className="mt-3 text-3xl font-extrabold text-rose-700 tracking-tight">SK Snack</h1>
+          <p className="text-rose-400 text-sm mt-1">ร้านขนมหวาน สไตล์พรีเมียม</p>
         </div>
-        <h1 className="relative text-3xl text-center my-4 font-bold text-white">LOGIN</h1>
-        <form onSubmit={handleSubmit} className="relative space-y-4">
-          <div className="relative">
-            <input
-              placeholder="Email"
-              className="w-full px-3 py-2 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              onChange={handleOnChange}
-              name="email"
-              type="email"
-            />
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white">
-              <i className="fas fa-user"></i>
-            </span>
-          </div>
-          <div className="relative">
-            <input
-              placeholder="Password"
-              className="w-full px-3 py-2 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              onChange={handleOnChange}
-              name="password"
-              type="password"
-            />
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white">
-              <i className="fas fa-lock"></i>
-            </span>
-          </div>
-          <button
-            className="w-full py-2 rounded bg-blue-500 text-white font-bold shadow-lg hover:bg-blue-700 transition-all"
-          >
-            Login
-          </button>
-        </form>
+
+        {/* Card */}
+        <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl border border-rose-100 p-8">
+          <h2 className="text-xl font-bold text-gray-800 mb-6 text-center">เข้าสู่ระบบ</h2>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-1">อีเมล</label>
+              <input
+                name="email"
+                type="email"
+                placeholder="your@email.com"
+                onChange={handleOnChange}
+                required
+                className="w-full px-4 py-2.5 rounded-xl border border-rose-200 bg-rose-50/50 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rose-300 focus:border-transparent transition"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-1">รหัสผ่าน</label>
+              <input
+                name="password"
+                type="password"
+                placeholder="••••••••"
+                onChange={handleOnChange}
+                required
+                className="w-full px-4 py-2.5 rounded-xl border border-rose-200 bg-rose-50/50 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-rose-300 focus:border-transparent transition"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-3 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold shadow-md hover:from-rose-600 hover:to-pink-600 active:scale-95 transition-all duration-200 mt-2"
+            >
+              เข้าสู่ระบบ
+            </button>
+          </form>
+
+          <p className="text-center text-sm text-gray-500 mt-6">
+            ยังไม่มีบัญชี?{" "}
+            <Link to="/register" className="text-rose-500 font-semibold hover:underline">
+              สมัครสมาชิก
+            </Link>
+          </p>
+        </div>
       </div>
-      <style jsx>{`
-        .bg-tech-pattern {
-          background: linear-gradient(90deg, rgba(0, 255, 255, 0.2) 1px, transparent 1px),
-                      linear-gradient(rgba(0, 255, 255, 0.2) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px),
-                      linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px);
-          background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
-          background-position: 0 0, 25px 25px, 0 0, 5px 5px;
-          animation: neon-grid 2s linear infinite;
-        }
-
-        @keyframes neon-grid {
-          0% {
-            background-position: 0 0, 25px 25px, 0 0, 5px 5px;
-          }
-          100% {
-            background-position: 50px 50px, 75px 75px, 10px 10px, 15px 15px;
-          }
-        }
-
-        .glow-effect {
-          width: 100%;
-          height: 100%;
-          border: 2px solid rgba(0, 255, 255, 0.5);
-          border-radius: 10px;
-          box-shadow: 0 0 20px rgba(0, 255, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.5), 0 0 60px rgba(0, 255, 255, 0.5);
-          animation: glow 1.5s infinite alternate;
-        }
-
-        @keyframes glow {
-          from {
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5), 0 0 40px rgba(0, 255, 255, 0.5), 0 0 60px rgba(0, 255, 255, 0.5);
-          }
-          to {
-            box-shadow: 0 0 40px rgba(0, 255, 255, 0.8), 0 0 80px rgba(0, 255, 255, 0.8), 0 0 120px rgba(0, 255, 255, 0.8);
-          }
-        }
-      `}</style>
     </div>
   );
 };

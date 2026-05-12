@@ -16,7 +16,7 @@ const ProtectRouteAdmin = ({ element }) => {
                 .then((res) => setOk(true))
                 .catch((err) => setOk(false))
         }
-    }, [])
+    }, [user, token])
 
     return ok ? element : <LoadingToRedirect />
 }

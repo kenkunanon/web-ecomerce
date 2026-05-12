@@ -1,14 +1,23 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
-  LayoutDashboard,
   UserCog,
   SquareChartGantt,
   ShoppingBasket,
   ListOrdered,
-  LogOut 
+  LogOut,
 } from "lucide-react";
+import useEcomStore from "../../store/ecom-store";
+
 const SidebarAdmin = () => {
+  const actionLogout = useEcomStore((s) => s.actionLogout);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    actionLogout();
+    navigate("/login");
+  };
+
   return (
     <div
       className="bg-gray-800 w-64 text-gray-100 
@@ -22,18 +31,6 @@ const SidebarAdmin = () => {
       </div>
 
       <nav className="flex-1 px-4 py-4 space-y-2">
-        <NavLink
-          to={"/admin"}
-          end
-          className={({ isActive }) =>
-            isActive
-              ? "bg-gray-900 rounded-md text-white px-4 py-2 flex items-center"
-              : "text-gray-300 px-4 py-2 hover:bg-gray-700 hover:text-white rounded flex items-center"
-          }
-        >
-          <LayoutDashboard className="mr-2" />
-          Dashboard
-        </NavLink>
         <NavLink
           to={"manage"}
           className={({ isActive }) =>
@@ -83,17 +80,14 @@ const SidebarAdmin = () => {
         </NavLink>
       </nav>
 
-      <div>
-        <NavLink
-          className={({ isActive }) =>
-            isActive
-              ? "bg-gray-900 rounded-md text-white px-4 py-2 flex items-center"
-              : "text-gray-300 px-4 py-2 hover:bg-gray-700 hover:text-white rounded flex items-center"
-          }
+      <div className="px-4 py-4">
+        <button
+          onClick={handleLogout}
+          className="w-full text-gray-300 px-4 py-2 hover:bg-red-600 hover:text-white rounded flex items-center transition-colors"
         >
-          <LogOut  className="mr-2" />
+          <LogOut className="mr-2" />
           Logout
-        </NavLink>
+        </button>
       </div>
     </div>
   );

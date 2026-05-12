@@ -8,22 +8,34 @@ cloudinary.config({
 });
 exports.create = async (req, res) => {
     try {
-        // code
-        const { title, description, price, quantity, categoryId, images } = req.body
-        // console.log(title, description, price, quantity, images)
+        const { title, description, price, quantity, categoryId, images, promotion } = req.body
+
+        const missing = []
+        if (!title) missing.push('title')
+        if (price === undefined || price === '') missing.push('price')
+        if (quantity === undefined || quantity === '') missing.push('quantity')
+        if (!categoryId) missing.push('categoryId')
+        if (!images || images.length === 0) missing.push('images')
+        if (missing.length > 0) {
+            return res.status(400).json({ message: `Missing required fields: ${missing.join(', ')}` })
+        }
+
         const product = await prisma.product.create({
             data: {
                 title: title,
                 description: description,
-                price: parseFloat(price)|| 0.0,
+                price: parseFloat(price) || 0.0,
                 quantity: parseInt(quantity),
                 categoryId: parseInt(categoryId),
-                images: {
+                promotion: promotion,
+                updatedAt: new Date(),
+                image: {
                     create: images.map((item) => ({
                         asset_id: item.asset_id,
                         public_id: item.public_id,
                         url: item.url,
-                        secure_url: item.secure_url
+                        secure_url: item.secure_url,
+                        updatedAt: new Date()
                     }))
                 }
             }
@@ -44,7 +56,7 @@ exports.list = async (req, res) => {
             orderBy: { createdAt: "desc" },
             include: {
                 category: true,
-                images: true
+                image: true
             }
         })
         res.send(products)
@@ -64,7 +76,7 @@ exports.read = async (req, res) => {
             },
             include: {
                 category: true,
-                images: true
+                image: true
             }
         })
         res.send(products)
@@ -77,17 +89,14 @@ exports.read = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-
-        const { title, description, price, quantity, categoryId, images } = req.body
-        // console.log(title, description, price, quantity, images)
+        // รับ promotion เข้ามาด้วย
+        const { title, description, price, quantity, categoryId, images, promotion } = req.body
 
         await prisma.image.deleteMany({
             where: {
                 productId: parseInt(req.params.id)
             }
         })
-
-
 
         const product = await prisma.product.update({
             where: {
@@ -99,12 +108,14 @@ exports.update = async (req, res) => {
                 price: parseFloat(price),
                 quantity: parseInt(quantity),
                 categoryId: parseInt(categoryId),
-                images: {
+                promotion: promotion,
+                image: {
                     create: images.map((item) => ({
                         asset_id: item.asset_id,
                         public_id: item.public_id,
                         url: item.url,
-                        secure_url: item.secure_url
+                        secure_url: item.secure_url,
+                        updatedAt: new Date()
                     }))
                 }
             }
@@ -127,7 +138,7 @@ exports.remove = async (req, res) => {
                 id: parseInt(id) // ✅ แก้ `where`
             },
             include: {
-                images: true
+                image: true
             }
         });
 
@@ -137,7 +148,7 @@ exports.remove = async (req, res) => {
         }
 
         // ✅ ลบรูปภาพจาก Cloudinary
-        const deletedImagePromises = product.images.map((image) => 
+        const deletedImagePromises = product.image.map((image) =>
             new Promise((resolve, reject) => {
                 cloudinary.uploader.destroy(image.public_id, (err, result) => {
                     if (err) reject(err);
@@ -179,7 +190,7 @@ exports.listby = async (req, res) => {
             orderBy: { [sort]: order },
             include: {
                 category: true,
-                images: true
+                image: true
             }
         })
         res.send(products)
@@ -200,7 +211,7 @@ const handleQuery = async (req, res, query) => {
             },
             include: {
                 category: true,
-                images: true
+                image: true
             }
 
         })
@@ -223,7 +234,7 @@ const handlePrice = async (req, res, priceRange) => {
             },
             include: {
                 category: true,
-                images: true
+                image: true
             }
         })
         res.send(products)
@@ -242,7 +253,7 @@ const handleCategory = async (req, res, categoryId) => {
             },
             include: {
                 category: true,
-                images: true
+                image: true
             }
         })
         res.send(products)
@@ -254,23 +265,19 @@ const handleCategory = async (req, res, categoryId) => {
 
 exports.searchFilters = async (req, res) => {
     try {
-        // code
         const { query, category, price } = req.body
 
         if (query) {
-            console.log('query-->', query)
-            await handleQuery(req, res, query)
+            return await handleQuery(req, res, query)
         }
         if (category) {
-            console.log('category-->', category)
-            await handleCategory(req, res, category)
+            return await handleCategory(req, res, category)
         }
         if (price) {
-            console.log('price-->', price)
-            await handlePrice(req, res, price)
+            return await handlePrice(req, res, price)
         }
 
-        // res.send('Hello searchFilters Product')
+        res.json([])
     } catch (err) {
         console.log(err)
         res.status(500).json({ message: "Server error" })

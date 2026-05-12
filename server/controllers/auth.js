@@ -5,43 +5,48 @@ const jwt = require('jsonwebtoken')
 
 exports.register = async (req, res) => {
     try {
-        //code
         const { email, password } = req.body
 
         // Step 1 Validate body
         if (!email) {
-            return res.status(400).json({ message: 'Email is required!!!' })
+            return res.status(400).json({ message: 'Email is required' })
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ message: 'Invalid email format' })
         }
         if (!password) {
-            return res.status(400).json({ message: "Password is required!!!" })
+            return res.status(400).json({ message: 'Password is required' })
+        }
+        if (password.length < 6) {
+            return res.status(400).json({ message: 'Password must be at least 6 characters' })
         }
 
-        // Step 2 Check Email in DB already ?
-        const user = await prisma.user.findFirst({
-            where: {
-                email: email
-            }
+        // Step 2 Check Email in DB already?
+        const normalizedEmail = email.trim().toLowerCase()
+        const existing = await prisma.user.findUnique({
+            where: { email: normalizedEmail }
         })
-        if (user) {
-            return res.status(400).json({ message: "Email already exits!!" })
+        if (existing) {
+            return res.status(400).json({ message: 'Email already exists' })
         }
-        // Step 3 HashPassword
+
+        // Step 3 Hash password
         const hashPassword = await bcrypt.hash(password, 10)
 
-        // Step 4 Register
+        // Step 4 Create user
         await prisma.user.create({
             data: {
-                email: email,
-                password: hashPassword
+                email: normalizedEmail,
+                password: hashPassword,
+                updatedAt: new Date()
             }
         })
 
-
-        res.send('Register Success')
+        res.json({ message: 'Register Success' })
     } catch (err) {
-        // err
         console.log(err)
-        res.status(500).json({ message: "Server Error" })
+        res.status(500).json({ message: 'Server Error' })
     }
 }
 

@@ -4,7 +4,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { payment } from "../../api/Stripe";
 import useEcomStore from "../../store/ecom-store";
 import CheckoutForm from "../../components/CheckoutForm";
-const stripePromise = loadStripe("pk_test_51R6OteAhZ9iy5twDnZ6UhFHs8fLpjgPcmIy9rBXaUlvVMUduJHVpJhlsbDTb0Cp3kSvUANUuIMT2MgqV1RppsNFR00Lifx2UC6");
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const Payment = () => {
   const token = useEcomStore((s) => s.token);

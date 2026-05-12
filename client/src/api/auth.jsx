@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+export const register = async (form) => await axios.post('http://localhost:5000/api/register', form)
+
 export const currentUser = async (token) => await axios.post('http://localhost:5000/api/current-user'
     , {}, {
     headers: {

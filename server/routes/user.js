@@ -3,7 +3,7 @@ const router = express.Router();
 const {authCheck,adminCheck} = require('../middlewares/authCheck');
 const { listUsers, changeStatus, changeRole
   , userCart, getUserCart, emptyCart, saveAddress,
-   saveOrder, getOrder} 
+   saveOrder, getOrder, placeOrder}
    = require('../controllers/user');
    
 router.get('/users',authCheck,adminCheck, listUsers); 
@@ -16,6 +16,7 @@ router.delete('/user/cart',authCheck,emptyCart)
 
 router.post('/user/address',authCheck,saveAddress)
 router.post('/user/order',authCheck,saveOrder)
+router.post('/user/place-order',authCheck,placeOrder)
 router.get('/user/order',authCheck,getOrder)
 
 

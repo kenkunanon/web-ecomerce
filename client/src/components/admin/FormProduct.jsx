@@ -11,6 +11,7 @@ const initialState = {
   price: '',
   quantity: '',
   categoryId: "",
+  promotion: "", // ✅ เพิ่มบรรทัดนี้เข้ามา
   images: [],
 }
 
@@ -135,10 +136,10 @@ const FormProduct = () => {
                 <tr key={product.id}>
                   <td className="border px-4 py-2">{index + 1}</td>
                   <td className="border px-4 py-2">
-                    {product.images && product.images.length > 0 ? (
+                    {product.image && product.image.length > 0 ? (
                       <img
                         className="w-24 h-24 rounded-lg shadow-md"
-                        src={product.images[0]?.url}
+                        src={product.image[0]?.url}
                         alt="Product"
                       />
                     ) : (
