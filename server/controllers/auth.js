@@ -75,17 +75,20 @@ exports.login = async (req, res) => {
             role: user.role
         }
         // Step 4 Generate Token
+        if (!process.env.SECRET) {
+            console.error("SECRET env variable is not set!")
+            return res.status(500).json({ message: "Server config error: SECRET missing" })
+        }
         jwt.sign(payload, process.env.SECRET, { expiresIn: '1d' }, (err, token) => {
             if (err) {
-                return res.status(500).json({ message: "Server Error" })
+                console.error("JWT sign error:", err)
+                return res.status(500).json({ message: "Token error: " + err.message })
             }
             res.json({ payload, token })
-
         })
     } catch (err) {
-        // err
-        console.log(err)
-        res.status(500).json({ message: "Server Error" })
+        console.error("Login error:", err)
+        res.status(500).json({ message: err.message || "Server Error" })
     }
 }
 exports.currentuser = async (req, res) => {
