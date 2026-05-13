@@ -1,5 +1,5 @@
 import React from "react";
-import { Trash2, Minus, Plus, ShoppingBag } from "lucide-react";
+import { Trash2, Minus, Plus, ShoppingBag, History } from "lucide-react";
 import useEcomStore from "../../store/ecom-store";
 import { Link } from "react-router-dom";
 
@@ -27,7 +27,17 @@ const CartCard = () => {
       {carts.length === 0 ? (
         <div className="text-center py-8 text-gray-400">
           <div className="text-4xl mb-2">🛒</div>
-          <p className="text-sm">ยังไม่มีสินค้าในตะกร้า</p>
+          <p className="text-sm mb-4">ยังไม่มีสินค้าในตะกร้า</p>
+          <Link to="/shop">
+            <button className="w-full py-2 rounded-xl bg-gradient-to-r from-rose-500 to-pink-500 text-white text-sm font-semibold shadow hover:from-rose-600 hover:to-pink-600 transition-all mb-2">
+              เลือกซื้อสินค้า
+            </button>
+          </Link>
+          <Link to="/history">
+            <button className="w-full py-2 rounded-xl border border-rose-200 text-rose-500 text-sm font-semibold hover:bg-rose-50 transition-colors flex items-center justify-center gap-1.5">
+              <History size={14} /> ดูประวัติสั่งซื้อ
+            </button>
+          </Link>
         </div>
       ) : (
         <div className="space-y-2">
