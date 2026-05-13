@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import useEcomStore from "../store/ecom-store";
-import { UserCircle, ShoppingCart, Home, Store, History } from "lucide-react";
+import { UserCircle, ShoppingCart, Home, Store, History, Menu, X } from "lucide-react";
 
 const MainNav = () => {
   const carts = useEcomStore((s) => s.carts);
@@ -9,6 +9,7 @@ const MainNav = () => {
   const actionLogout = useEcomStore((s) => s.actionLogout);
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -24,6 +25,7 @@ const MainNav = () => {
   const handleLogout = () => {
     actionLogout();
     setDropdownOpen(false);
+    setMenuOpen(false);
     navigate("/login");
   };
 
@@ -62,7 +64,7 @@ const MainNav = () => {
           </div>
 
           {/* Right */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {/* Cart */}
             <NavLink
               to="/cart"
@@ -133,23 +135,64 @@ const MainNav = () => {
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 sm:gap-2">
                 <Link
                   to="/login"
-                  className="px-4 py-1.5 text-sm font-medium text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                  className="px-3 sm:px-4 py-1.5 text-sm font-medium text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
                 >
                   เข้าสู่ระบบ
                 </Link>
                 <Link
                   to="/register"
-                  className="px-4 py-1.5 text-sm font-bold text-white bg-gradient-to-r from-rose-500 to-pink-500 rounded-lg hover:from-rose-600 hover:to-pink-600 shadow-sm transition-all"
+                  className="hidden sm:block px-4 py-1.5 text-sm font-bold text-white bg-gradient-to-r from-rose-500 to-pink-500 rounded-lg hover:from-rose-600 hover:to-pink-600 shadow-sm transition-all"
                 >
                   สมัครสมาชิก
                 </Link>
               </div>
             )}
+
+            {/* Hamburger button - mobile only */}
+            <button
+              onClick={() => setMenuOpen((o) => !o)}
+              className="sm:hidden p-2 rounded-lg hover:bg-rose-50 transition-colors"
+              aria-label="เมนู"
+            >
+              {menuOpen
+                ? <X size={20} className="text-gray-600" />
+                : <Menu size={20} className="text-gray-600" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile menu */}
+        {menuOpen && (
+          <div className="sm:hidden border-t border-rose-100 py-2 space-y-1 pb-3">
+            <NavLink
+              to="/"
+              end
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) => (isActive ? activeNavLink : navLink)}
+            >
+              <Home size={15} /> หน้าหลัก
+            </NavLink>
+            <NavLink
+              to="/shop"
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) => (isActive ? activeNavLink : navLink)}
+            >
+              <Store size={15} /> ร้านค้า
+            </NavLink>
+            {!user && (
+              <Link
+                to="/register"
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-bold text-white bg-gradient-to-r from-rose-500 to-pink-500 w-fit"
+              >
+                สมัครสมาชิก
+              </Link>
+            )}
+          </div>
+        )}
       </div>
     </nav>
   );

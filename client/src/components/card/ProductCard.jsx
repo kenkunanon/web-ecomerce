@@ -11,7 +11,7 @@ const ProductCard = ({ item }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      className="w-44"
+      className="w-full"
     >
       <div className="bg-white rounded-2xl shadow-sm border border-rose-100 overflow-hidden hover:shadow-md hover:-translate-y-1 transition-all duration-200 group">
         {/* Image */}

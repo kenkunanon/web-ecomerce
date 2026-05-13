@@ -24,7 +24,7 @@ const Home = () => {
         <div className="absolute -top-10 -right-10 w-72 h-72 bg-white rounded-full opacity-10 blur-2xl" />
         <div className="absolute bottom-0 left-0 w-96 h-40 bg-pink-300 rounded-full opacity-20 blur-3xl" />
 
-        <div className="relative max-w-4xl mx-auto px-6 py-24 text-center text-white">
+        <div className="relative max-w-4xl mx-auto px-6 py-14 md:py-24 text-center text-white">
           <p className="text-sm font-semibold tracking-widest uppercase bg-white/20 inline-block px-4 py-1 rounded-full mb-4">
             🍬 ร้านขนมสไตล์พรีเมียม
           </p>
@@ -82,12 +82,12 @@ const Home = () => {
 
       {/* About / CTA */}
       <section className="max-w-4xl mx-auto px-6 py-16">
-        <div className="bg-gradient-to-r from-rose-500 to-pink-400 rounded-3xl p-10 text-white text-center shadow-xl relative overflow-hidden">
+        <div className="bg-gradient-to-r from-rose-500 to-pink-400 rounded-3xl p-6 md:p-10 text-white text-center shadow-xl relative overflow-hidden">
           <div className="absolute -top-8 -right-8 w-40 h-40 bg-white rounded-full opacity-10" />
           <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-pink-300 rounded-full opacity-20" />
           <div className="relative">
             <p className="text-4xl mb-4">🎂</p>
-            <h2 className="text-3xl font-extrabold mb-3">เกี่ยวกับเรา</h2>
+            <h2 className="text-2xl md:text-3xl font-extrabold mb-3">เกี่ยวกับเรา</h2>
             <p className="text-white/90 text-base max-w-xl mx-auto leading-relaxed">
               SK Snack คือร้านขนมทำมือที่ใส่ใจทุกรายละเอียด
               วัตถุดิบคุณภาพสูง สูตรเฉพาะของเรา บวกกับแพ็คเกจสวยงาม
